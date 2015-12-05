@@ -193,10 +193,12 @@ casper.spider = function(){
                 //search the current page for the words
                 wordCount = this.evaluate(function(wordCount,currentLink){
                     for(key in wordCount){
-                        var count = (document.body.textContent.match(new RegExp(key,'gi')) || []).length;
-                        if(count > 0){
-                            wordCount[key].count += count;
-                            wordCount[key].pages.push(currentLink);
+                        if(keys[i] !== 'placeholderNullChar'){
+                            var count = (document.body.textContent.match(new RegExp(key,'gi')) || []).length;
+                            if(count > 0){
+                                wordCount[key].count += count;
+                                wordCount[key].pages.push(currentLink);
+                            }
                         }
                     }
                     return wordCount;
