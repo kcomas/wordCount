@@ -62,13 +62,19 @@ completed.push(url+'/');
  * The word count for the word
  * @type {object}
  * @property {string} key - the word we are searching for
- * @property {number} value - the number of times the word has been found
+ * @property {number} count - the number of times the word has been found
+ * @property {array} pages - the pages the url appears on
  */
 var wordCount = {};
 
 words.forEach(function(word){
-    wordCount[word] = 0;
+    wordCount[word] = {
+        count : 0,
+        pages : []
+    };
 });
+
+
 
 casper.start();
 
@@ -131,7 +137,7 @@ casper.printCount = function(){
         var keys = Object.keys(wordCount);
         for(var i=0,l=keys.length; i<l; i++){
             if(keys[i] !== 'placeholderNullChar'){
-                this.echo(keys[i] + ' : ' + wordCount[keys[i]]);
+                this.echo(keys[i] + ' : ' + wordCount[keys[i]].count + ' : ' + JSON.stringify(wordCount[keys[i]].pages));
             }
         }
     }catch(err){
@@ -185,12 +191,16 @@ casper.spider = function(){
                 });
                 currentPage++;
                 //search the current page for the words
-                wordCount = this.evaluate(function(wordCount){
+                wordCount = this.evaluate(function(wordCount,currentLink){
                     for(key in wordCount){
-                        wordCount[key] += (document.body.textContent.match(new RegExp(key,'gi')) || []).length;
+                        var count = (document.body.textContent.match(new RegExp(key,'gi')) || []).length;
+                        if(count > 0){
+                            wordCount[key].count += count;
+                            wordCount[key].pages.push(currentLink);
+                        }
                     }
                     return wordCount;
-                },wordCount);
+                },wordCount,currentLink);
                 return this.spider();
             });
         });
