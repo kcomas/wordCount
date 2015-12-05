@@ -56,6 +56,8 @@ queue.push(url);
  */
 var completed = [];
 
+completed.push(url+'/');
+
 /**
  * The word count for the word
  * @type {object}
@@ -78,7 +80,7 @@ casper.start();
  */
 var convert = function(link,currentLink){
     //check if the url is just the url with a /
-    if(link+'/' === url){
+    if((link+'/') === url){
         return null;
     }
     //remove hashes
