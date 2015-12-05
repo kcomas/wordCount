@@ -143,7 +143,7 @@ casper.spider = function(){
                 //search the current page for the words
                 wordCount = this.evaluate(function(wordCount){
                     for(key in wordCount){
-                        wordCount[key] += (document.body.textContent.match(new RegExp(key,'g')) || []).length;
+                        wordCount[key] += (document.body.textContent.match(new RegExp(key,'gi')) || []).length;
                     }
                     return wordCount;
                 },wordCount);
