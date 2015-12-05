@@ -134,12 +134,14 @@ casper.printCount = function(){
     }
     //done
     try {
+        this.echo('');
         var keys = Object.keys(wordCount);
         for(var i=0,l=keys.length; i<l; i++){
             if(keys[i] !== 'placeholderNullChar'){
                 this.echo(keys[i] + ' : ' + wordCount[keys[i]].count + ' : ' + JSON.stringify(wordCount[keys[i]].pages));
             }
         }
+        this.echo('');
     }catch(err){
         this.echo(err);
         this.echo(JSON.stringify(wordCount).replace('{','').replace('}',''));
