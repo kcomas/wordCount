@@ -77,6 +77,10 @@ casper.start();
  * @return {string} - the converted link
  */
 var convert = function(link,currentLink){
+    //check if the url is just the url with a /
+    if(link+'/' === url){
+        return null;
+    }
     //remove hashes
     if(link.indexOf('#') > -1){
         link = link.substr(0,link.indexOf('#'));
