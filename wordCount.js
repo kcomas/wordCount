@@ -23,11 +23,21 @@ if(isNaN(maxPages)){
  */
 var url = casper.cli.get(0);
 
+if(url.lastIndexOf('/') === url.length-1){
+    url = url.substr(0,url.length-1);
+}
+
 /**
  * The words to search for
  * @type {array}
  */
-var words = casper.cli.get(1).split(',');
+var words = casper.cli.get(1);
+
+//add a comma if not one there
+if(words.indexOf(',') === -1){
+    words = words + ',placeholderNullChar';
+}
+    words = words.split(',');
 
 /**
  * The current queue we are searching for
@@ -93,27 +103,45 @@ var convert = function(link,currentLink){
 };
 
 /**
+ * Print the word count
+ */
+casper.printCount = function(){
+    if(wordCount.placeholderNullChar){
+        delete wordCount.placeholderNullChar;
+    }
+    //done
+    try {
+        var keys = Object.keys(wordCount);
+        for(var i=0,l=keys.length; i<l; i++){
+            if(keys[i] !== 'placeholderNullChar'){
+                this.echo(keys[i] + ' : ' + wordCount[keys[i]]);
+            }
+        }
+    }catch(err){
+        this.echo(err);
+        this.echo(JSON.stringify(wordCount).replace('{','').replace('}',''));
+    }
+};
+
+
+/**
  * Search the webpage, get all of the links on the page and do a word count for that page
  */
 casper.spider = function(){
     return this.then(function(){
         if(queue.length === 0){
-            //done
-            for(key in wordCount){
-                this.echo(key + ' : ' + wordCount[key]);
-            }
+            this.printCount();        
             return;
         }
         if(maxPages !== 0){
             if(maxPages === currentPage){
-                //done
-                for(key in wordCount){
-                    this.echo(key + ' : ' + wordCount[key]);
-                }
+                this.printCount();
                 return;
             }
         }
         var currentLink = queue.shift();
+        completed.push(currentLink);
+        this.echo(currentLink);
         this.thenOpen(currentLink,function(){
             this.wait(2000,function(){
                 //find all of the links on the page
@@ -137,8 +165,6 @@ casper.spider = function(){
                         }
                     }
                 });
-                completed.push(currentLink);
-                this.echo(currentLink);
                 currentPage++;
                 //search the current page for the words
                 wordCount = this.evaluate(function(wordCount){
