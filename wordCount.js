@@ -1,6 +1,9 @@
 
 var casper = require('casper').create();
 
+//set the useragent to chrome
+casper.userAgent('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36');
+
 /**
  * The maximum number of pages to search defaults to 10 0 for entire site
  * @type {number}
