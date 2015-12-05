@@ -79,6 +79,14 @@ casper.start();
  * @return {string} - the converted link
  */
 var convert = function(link,currentLink){
+    //remove hashes
+    if(link.indexOf('#') > -1){
+        link = link.substr(0,link.indexOf('#'));
+    }
+    //check if the link has the index of the base url
+    if(link.indexOf(url) === 0){
+        return link;
+    }
     //check if the url is just the url with a /
     if((link+'/') === url){
         return null;
@@ -87,18 +95,14 @@ var convert = function(link,currentLink){
     if(link.indexOf('//') === 0){
         return null;
     }
-    //remove hashes
-    if(link.indexOf('#') > -1){
-        link = link.substr(0,link.indexOf('#'));
+    if(link.match('https?:\/\/')){
+        return null;
     }
     if(link.indexOf(url) === 0){
         return link;
     }
     if(link.indexOf('/') === 0){
         return url + link;
-    }
-    if(link.match('https?:\/\/')){
-        return null;
     }
     //check if the link has an index of the ... format
     if(link.indexOf('../') > -1){
