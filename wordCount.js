@@ -156,7 +156,8 @@ casper.spider = function(){
         completed.push(currentLink);
         this.echo(currentLink);
         this.thenOpen(currentLink,function(){
-            this.wait(2000,function(){
+            var time = Math.floor(Math.random() * 9000) + 1000;
+            this.wait(time,function(){
                 //find all of the links on the page
                 var links = this.evaluate(function(){
                     var links = [];
