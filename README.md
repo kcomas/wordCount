@@ -1,6 +1,8 @@
 
 Counts the number of words on a website, requires casperjs
 
+The word search is case insensative
+
 usage
 
 casper.js wordCount.js url "words seprated by comma" "Number of pages to search 0 for entire site"
