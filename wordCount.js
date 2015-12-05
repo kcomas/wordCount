@@ -83,6 +83,10 @@ var convert = function(link,currentLink){
     if((link+'/') === url){
         return null;
     }
+    //stop // at the beginging
+    if(link.indexOf('//') === 0){
+        return null;
+    }
     //remove hashes
     if(link.indexOf('#') > -1){
         link = link.substr(0,link.indexOf('#'));
